@@ -24,7 +24,7 @@ public class JavaApiMain {
 		
 
 		MovieController movieCtrl = new MovieController();
-		Movie movie = new Movie("Bomberman", "Me", 2013, 20);
+		Movie movie = new Movie("Frozen", "Florentina", 2013, 25);
 	/*	Movie movie2 = new Movie("The Avengers", "Marvel", 2012, 17);
 		Movie movie3 = new Movie("IronMan", "Robert", 2013, 12);
 		Movie movie4 = new Movie("Superman2", "Director", 2012, 13);
