@@ -129,11 +129,12 @@ public class MovieController implements MovieControllerInterface {
 		SearchResponse response;
 
 		if (value == null && column == null) {
-			response = client.prepareSearch().execute().actionGet();
+			response = client.prepareSearch().setTypes(Constants.MOVIE_TYPE)
+					.execute().actionGet();
 
 		} else {
 
-			response = client.prepareSearch()
+			response = client.prepareSearch().setTypes(Constants.MOVIE_TYPE)
 					.setQuery(QueryBuilders.matchQuery(column, value))
 					.execute().actionGet();
 		}
