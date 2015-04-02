@@ -8,6 +8,8 @@ import org.elasticsearch.client.Client;
 import org.elasticsearch.node.Node;
 
 import ro.fortech.business.MovieController;
+import ro.fortech.model.Movie;
+import ro.fortech.utils.Constants;
 
 public class JavaApiMain {
 
