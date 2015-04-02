@@ -51,11 +51,14 @@ public class SimpleReport {
 		tableModel = new DefaultTableModel(data, columnNames);
 	}
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new SimpleReport();
 
 		MovieController movieCtrl = new MovieController();
-		List<Movie> movies =  movieCtrl.searchDocument("movies", "movie");
+		List<Movie> movies =  movieCtrl.searchDocument();
 		
 		/*for (entry : movies) {
 			String st = entry;
