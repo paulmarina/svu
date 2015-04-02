@@ -22,6 +22,6 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="lib/ElasticSearch(5).jar"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/ElasticSearchTest"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

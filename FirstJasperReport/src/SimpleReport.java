@@ -23,9 +23,9 @@ public class SimpleReport {
 			parameters.put("ReportTitle", "Movies");
 			parameters.put("Author", "P.A.I.");
 			
-			String s = JasperCompileManager
-					.compileReportToFile("reports/report1.jrxml");
-			jasperPrint = JasperFillManager.fillReport(s, parameters,
+/*			String s = JasperCompileManager
+					.compileReportToFile("reports/report1.jrxml");*/
+			jasperPrint = JasperFillManager.fillReport("reports/report1.jasper", parameters,
 					new JRTableModelDataSource(tableModel));
 			JasperViewer jasperViewer = new JasperViewer(jasperPrint);
 			jasperViewer.setVisible(true);
@@ -56,8 +56,9 @@ public class SimpleReport {
 		MovieController movieCtrl = new MovieController();
 		Map<String, Object> movies =  movieCtrl.searchDocument("movies", "movie");
 		
-		/*for (Map.Entry<String, Object> entry : movies.entrySet()) {
-			
-		}*/
+		for (Map.Entry<String, Object> entry : movies.entrySet()) {
+			String st = entry.getValue().toString();
+			System.out.print(st);
+		}
 	}
 }
