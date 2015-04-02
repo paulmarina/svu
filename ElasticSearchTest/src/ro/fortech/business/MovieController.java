@@ -11,6 +11,7 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
@@ -26,7 +27,7 @@ public class MovieController implements MovieControllerInterface {
 
 	public MovieController() {
 
-		this.node = nodeBuilder().node();
+		this.node = nodeBuilder().clusterName("mormon").node();
 		this.client = node.client();
 
 	}
@@ -130,11 +131,12 @@ public class MovieController implements MovieControllerInterface {
 		SearchResponse response;
 
 		if (value == null && column == null) {
-			response = client.prepareSearch().execute().actionGet();
+			response = client.prepareSearch().setTypes(Constants.MOVIE_TYPE)
+					.execute().actionGet();
 
 		} else {
 
-			response = client.prepareSearch()
+			response = client.prepareSearch().setTypes(Constants.MOVIE_TYPE)
 					.setQuery(QueryBuilders.matchQuery(column, value))
 					.execute().actionGet();
 		}
