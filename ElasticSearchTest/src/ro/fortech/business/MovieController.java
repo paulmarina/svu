@@ -10,7 +10,6 @@ import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
-import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
@@ -18,6 +17,7 @@ import org.elasticsearch.search.SearchHit;
 
 import ro.fortech.interfaces.MovieControllerInterface;
 import ro.fortech.model.Movie;
+import ro.fortech.utils.Constants;
 
 public class MovieController implements MovieControllerInterface {
 
@@ -46,8 +46,8 @@ public class MovieController implements MovieControllerInterface {
 
 		UpdateRequest updateRequest = new UpdateRequest();
 
-		updateRequest.index("movies");
-		updateRequest.type("movie");
+		updateRequest.index(Constants.MOVIE_INDEX);
+		updateRequest.type(Constants.MOVIE_TYPE);
 		updateRequest.id(String.valueOf(movie.getId()));
 		updateRequest.doc(createJsonDocument(movie));
 		try {
@@ -59,21 +59,21 @@ public class MovieController implements MovieControllerInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		client.close();
 
 	}
 
 	public void upsertDocument(Movie movie) {
 
-		IndexRequest indexRequest = new IndexRequest("movies", "movie",
-				String.valueOf(movie.getId()))
+		IndexRequest indexRequest = new IndexRequest(Constants.MOVIE_INDEX,
+				Constants.MOVIE_TYPE, String.valueOf(movie.getId()))
 				.source(createJsonDocument(movie));
-		UpdateRequest updateRequest = new UpdateRequest("movies", "movie",
-				String.valueOf(movie.getId())).doc(createJsonDocument(movie))
-				.upsert(indexRequest);
+		UpdateRequest updateRequest = new UpdateRequest(Constants.MOVIE_INDEX,
+				Constants.MOVIE_TYPE, String.valueOf(movie.getId())).doc(
+				createJsonDocument(movie)).upsert(indexRequest);
 		try {
-			UpdateResponse response = client.update(updateRequest).get();
+			client.update(updateRequest).get();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -85,11 +85,11 @@ public class MovieController implements MovieControllerInterface {
 		client.close();
 	}
 
-	public Map<String, Object> getDocument(String index, String type, int id) {
+	public Map<String, Object> getDocument(String id) {
 
 		GetResponse getResponse = client
-				.prepareGet(index, type, String.valueOf(id)).execute()
-				.actionGet();
+				.prepareGet(Constants.MOVIE_INDEX, Constants.MOVIE_TYPE, id)
+				.execute().actionGet();
 		Map<String, Object> source = getResponse.getSource();
 
 		System.out.println("------------------------------");
@@ -101,20 +101,20 @@ public class MovieController implements MovieControllerInterface {
 		System.out.println("------------------------------");
 
 		client.close();
-		
+
 		return source;
 
-		
 	}
 
-	public void deleteDocument(String index, String type, String id) {
+	public void deleteDocument(String id) {
 
-		client.prepareDelete(index, type, id).execute().actionGet();
+		client.prepareDelete(Constants.MOVIE_INDEX, Constants.MOVIE_TYPE, id)
+				.execute().actionGet();
 		client.close();
 
 	}
 
-	public Map<String, Object> searchDocument(String index, String type) {
+	public Map<String, Object> searchDocument(String column, String value) {
 
 		/*
 		 * SearchResponse response = client .prepareSearch("index")
@@ -127,12 +127,17 @@ public class MovieController implements MovieControllerInterface {
 		// SearchResponse response =
 		// client.prepareSearch().setPostFilter(FilterBuilders.rangeFilter("year").from(2010).to(2015)).execute().actionGet();
 
-		
-		/*  SearchResponse response = client.prepareSearch()
-		  .setQuery(QueryBuilders.matchQuery("year", 2013)).execute()
-		 .actionGet();*/
-		 
-		SearchResponse response = client.prepareSearch().execute().actionGet();
+		SearchResponse response;
+
+		if (value == null && column == null) {
+			response = client.prepareSearch().execute().actionGet();
+
+		} else {
+
+			response = client.prepareSearch()
+					.setQuery(QueryBuilders.matchQuery(column, value))
+					.execute().actionGet();
+		}
 
 		Map<String, Object> result = new HashMap<String, Object>();
 
@@ -145,5 +150,9 @@ public class MovieController implements MovieControllerInterface {
 
 		client.close();
 		return result;
+	}
+
+	public Map<String, Object> searchDocument() {
+		return searchDocument(null, null);
 	}
 }

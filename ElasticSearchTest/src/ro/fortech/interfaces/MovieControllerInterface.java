@@ -10,10 +10,11 @@ public interface MovieControllerInterface {
 
 	public void updateDocument(Movie movie);
 
-	public Map<String, Object> getDocument(String index, String type, int id);
+	public Map<String, Object> getDocument(String id);
 
-	public void deleteDocument(String index, String type, String id);
+	public void deleteDocument(String id);
 
-	public Map<String, Object> searchDocument(String index, String type);
+	public Map<String, Object> searchDocument(String column,String value);
 
+	public Map<String, Object> searchDocument();
 }
