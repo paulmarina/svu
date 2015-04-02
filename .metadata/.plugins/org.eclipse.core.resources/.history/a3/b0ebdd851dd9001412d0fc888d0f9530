@@ -1,7 +1,0 @@
-package ro.fortech.utils;
-
-public static class Constants {
-
-	public static final String INDEX = "movies";
-	
-}
