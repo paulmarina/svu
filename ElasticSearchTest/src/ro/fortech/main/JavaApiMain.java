@@ -14,11 +14,6 @@ public class JavaApiMain {
 
 	public static void main(String[] args) throws IOException {
 
-		/*ImmutableSettings.Builder settings =ImmutableSettings.settingsBuilder();
-		settings.put("node.name", "Garofita");
-		Node node = nodeBuilder().settings(settings).clusterName("mormon").node();*/
-
-		
 		Node node = nodeBuilder().clusterName("mormon").node();
 		Client client = node.client();
 		

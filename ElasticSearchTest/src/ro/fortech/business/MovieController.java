@@ -2,8 +2,7 @@ package ro.fortech.business;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -11,7 +10,6 @@ import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.client.Client;
-import org.elasticsearch.common.settings.ImmutableSettings;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
@@ -115,7 +113,7 @@ public class MovieController implements MovieControllerInterface {
 
 	}
 
-	public Map<String, Object> searchDocument(String column, String value) {
+	public List<Movie> searchDocument(String column, String value) {
 
 		/*
 		 * SearchResponse response = client .prepareSearch("index")
@@ -141,11 +139,31 @@ public class MovieController implements MovieControllerInterface {
 					.execute().actionGet();
 		}
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		List<Movie> result = new ArrayList<Movie>();
 
 		SearchHit[] results = response.getHits().getHits();
 		for (SearchHit hit : results) {
-			result = hit.getSource();
+			Map<String, Object> partialResult = hit.getSource();
+			
+			for (Map.Entry<String, Object> entry : partialResult.entrySet()) {
+				String localTitle = "";
+				String localDirector = "";
+				int localId = 0;
+				int localYear = 0;
+				if(entry.getKey().equals("title")){
+					localTitle = entry.getValue().toString();
+				} else if(entry.getKey().equals("director")){
+					localDirector = entry.getValue().toString();
+				} else if(entry.getKey().equals("id")){
+					localId = Integer.parseInt(entry.getValue().toString());
+				} else if(entry.getKey().equals("year")){
+					localYear = Integer.parseInt(entry.getValue().toString());
+				}
+				
+				Movie movie = new Movie(localTitle,localDirector, localYear, localId);
+				result.add(movie);
+			}
+			
 			System.out.println(hit.getType());
 			System.out.println(result);
 		}
@@ -154,7 +172,7 @@ public class MovieController implements MovieControllerInterface {
 		return result;
 	}
 
-	public Map<String, Object> searchDocument() {
+	public List<Movie> searchDocument() {
 		return searchDocument(null, null);
 	}
 }
