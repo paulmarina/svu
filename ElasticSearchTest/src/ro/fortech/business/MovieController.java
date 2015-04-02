@@ -2,8 +2,7 @@ package ro.fortech.business;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -26,7 +25,7 @@ public class MovieController implements MovieControllerInterface {
 
 	public MovieController() {
 
-		this.node = nodeBuilder().node();
+		this.node = nodeBuilder().clusterName("mormon").node();
 		this.client = node.client();
 
 	}
@@ -114,7 +113,7 @@ public class MovieController implements MovieControllerInterface {
 
 	}
 
-	public Map<String, Object> searchDocument(String column, String value) {
+	public List<Movie> searchDocument(String column, String value) {
 
 		/*
 		 * SearchResponse response = client .prepareSearch("index")
@@ -139,11 +138,31 @@ public class MovieController implements MovieControllerInterface {
 					.execute().actionGet();
 		}
 
-		Map<String, Object> result = new HashMap<String, Object>();
+		List<Movie> result = new ArrayList<Movie>();
 
 		SearchHit[] results = response.getHits().getHits();
 		for (SearchHit hit : results) {
-			result = hit.getSource();
+			Map<String, Object> partialResult = hit.getSource();
+			
+			for (Map.Entry<String, Object> entry : partialResult.entrySet()) {
+				String localTitle = "";
+				String localDirector = "";
+				int localId = 0;
+				int localYear = 0;
+				if(entry.getKey().equals("title")){
+					localTitle = entry.getValue().toString();
+				} else if(entry.getKey().equals("director")){
+					localDirector = entry.getValue().toString();
+				} else if(entry.getKey().equals("id")){
+					localId = Integer.parseInt(entry.getValue().toString());
+				} else if(entry.getKey().equals("year")){
+					localYear = Integer.parseInt(entry.getValue().toString());
+				}
+				
+				Movie movie = new Movie(localTitle,localDirector, localYear, localId);
+				result.add(movie);
+			}
+			
 			System.out.println(hit.getType());
 			System.out.println(result);
 		}
@@ -152,7 +171,7 @@ public class MovieController implements MovieControllerInterface {
 		return result;
 	}
 
-	public Map<String, Object> searchDocument() {
+	public List<Movie> searchDocument() {
 		return searchDocument(null, null);
 	}
 }

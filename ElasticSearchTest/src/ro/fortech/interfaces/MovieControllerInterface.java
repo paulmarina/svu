@@ -1,5 +1,6 @@
 package ro.fortech.interfaces;
 
+import java.util.List;
 import java.util.Map;
 
 import ro.fortech.model.Movie;
@@ -14,7 +15,7 @@ public interface MovieControllerInterface {
 
 	public void deleteDocument(String id);
 
-	public Map<String, Object> searchDocument(String column,String value);
+	public List<Movie> searchDocument(String column,String value);
 
-	public Map<String, Object> searchDocument();
+	public List<Movie> searchDocument();
 }

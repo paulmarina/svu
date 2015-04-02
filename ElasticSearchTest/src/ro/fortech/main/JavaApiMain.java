@@ -13,7 +13,7 @@ public class JavaApiMain {
 
 	public static void main(String[] args) throws IOException {
 
-		Node node = nodeBuilder().node();
+		Node node = nodeBuilder().clusterName("mormon").node();
 		Client client = node.client();
 
 		MovieController movieCtrl = new MovieController();

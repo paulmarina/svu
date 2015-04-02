@@ -3,7 +3,9 @@
 #################
 
 ElasticSearchTest/data
+FirstJasperReport/data
 *.pydevproject
+*.class
 .project
 .metadata
 .gradle

@@ -1,4 +1,5 @@
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
@@ -54,11 +55,11 @@ public class SimpleReport {
 		new SimpleReport();
 
 		MovieController movieCtrl = new MovieController();
-		Map<String, Object> movies =  movieCtrl.searchDocument("movies", "movie");
+		List<Movie> movies =  movieCtrl.searchDocument("movies", "movie");
 		
-		for (Map.Entry<String, Object> entry : movies.entrySet()) {
-			String st = entry.getValue().toString();
+		/*for (entry : movies) {
+			String st = entry;
 			System.out.print(st);
-		}
+		}*/
 	}
 }
