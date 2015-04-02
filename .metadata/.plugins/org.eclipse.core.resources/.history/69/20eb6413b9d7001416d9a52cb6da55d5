@@ -1,0 +1,97 @@
+package ro.fortech.business;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.ExecutionException;
+
+import org.elasticsearch.action.delete.DeleteResponse;
+import org.elasticsearch.action.get.GetResponse;
+import org.elasticsearch.action.search.SearchResponse;
+import org.elasticsearch.action.update.UpdateRequest;
+import org.elasticsearch.client.Client;
+import org.elasticsearch.search.SearchHit;
+
+import ro.fortech.model.Movie;
+
+public class MovieController {
+
+	public MovieController() {
+
+	}
+
+	public Map<String, Object> putJsonDocument(Movie movie) {
+
+		Map<String, Object> jsonDocument = new HashMap<String, Object>();
+
+		jsonDocument.put("title", movie.getTitle());
+		jsonDocument.put("director", movie.getDirector());
+		jsonDocument.put("year", movie.getYear());
+		return jsonDocument;
+	}
+
+	public void updateDocument(Client client, Movie movie) {
+
+		UpdateRequest updateRequest = new UpdateRequest();
+
+		updateRequest.index("movies");
+		updateRequest.type("movie");
+		updateRequest.id("1");
+		updateRequest.doc(putJsonDocument(movie));
+		try {
+			client.update(updateRequest).get();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (ExecutionException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void getDocument(Client client, String index, String type, int id) {
+
+		GetResponse getResponse = client
+				.prepareGet(index, type, String.valueOf(id)).execute()
+				.actionGet();
+		Map<String, Object> source = getResponse.getSource();
+
+		System.out.println("------------------------------");
+		System.out.println("Index: " + getResponse.getIndex());
+		System.out.println("Type: " + getResponse.getType());
+		System.out.println("Id: " + getResponse.getId());
+		System.out.println("Version: " + getResponse.getVersion());
+		System.out.println(source);
+		System.out.println("------------------------------");
+
+	}
+
+	public void deleteDocument(Client client, String index, String type, int id) {
+
+		DeleteResponse response = client
+				.prepareDelete("movies", "movie", String.valueOf(id)).execute()
+				.actionGet();
+
+	}
+
+	public void searchDocument(Client client, String index, String type) {
+
+		/*
+		 * SearchResponse response = client .prepareSearch("index")
+		 * .setTypes("type") .setSearchType(SearchType.DFS_QUERY_THEN_FETCH)
+		 * .setQuery(QueryBuilders.termQuery("multi", "test")) // Query
+		 * .setPostFilter(
+		 * FilterBuilders.rangeFilter("year").from(2010).to(2015)) // Filter
+		 * .setFrom(0).setSize(60).setExplain(true).execute().actionGet();
+		 */
+		SearchResponse response = client.prepareSearch().execute().actionGet();
+
+		SearchHit[] results = response.getHits().getHits();
+		for (SearchHit hit : results) {
+			Map<String, Object> result = hit.getSource();
+			System.out.println(result);
+
+		}
+	}
+
+}

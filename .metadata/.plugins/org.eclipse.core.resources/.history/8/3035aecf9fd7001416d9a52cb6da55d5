@@ -1,0 +1,30 @@
+package ro.fortech.main;
+
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+
+import java.io.IOException;
+import java.util.Date;
+
+import org.elasticsearch.client.Client;
+import org.elasticsearch.node.Node;
+
+public class JavaApiMain {
+
+	public static void main(String[] args) throws IOException {
+
+		Node node = nodeBuilder().node();
+		Client client = node.client();
+
+		client.prepareIndex("movies", "movie", "1")
+				.setSource(
+						putJsonDocument(
+								"ElasticSearch: Java",
+								"ElasticSeach provides Java API, thus it executes all operations "
+										+ "asynchronously by using client object..",
+								new Date(), new String[] { "elasticsearch" },
+								"Huseyin Akdogan")).execute().actionGet();
+
+		node.close();
+	}
+
+}

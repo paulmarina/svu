@@ -1,0 +1,5 @@
+package ro.fortech.model;
+
+public class Movie {
+
+}
