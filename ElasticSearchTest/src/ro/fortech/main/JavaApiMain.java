@@ -25,22 +25,25 @@ public class JavaApiMain {
 		Movie movie5 = new Movie("Captain America", "Dir", 2012, 14);
 		Movie movie6 = new Movie("Hulk", "Green", 2011, 15);
 
-		/*client.prepareIndex("movies", "movie", String.valueOf(movie.getId()))
-				.setSource(movieCtrl.createJsonDocument(movie4)).execute()
-				.actionGet();
-*/
+		/*client.prepareIndex("movies", "movie", String.valueOf(movie6.getId()))
+				.setSource(movieCtrl.createJsonDocument(movie6)).execute()
+				.actionGet();*/
+
 		// client.prepareIndex("movies",
 		// "movie","2").setSource(movieCtrl.putJsonDocument(movie2)).execute().actionGet();
 
 		// movieCtrl.updateDocument(movie);
 
-		 movieCtrl.deleteDocument("movies", "movie", "11");
+		// movieCtrl.deleteDocument("movies", "movie", "16");
 
 		// node.close();
 
 		// movieCtrl.upsertDocument(movie4);
-		//movieCtrl.searchDocument("movies", "movie");
+		movieCtrl.searchDocument("movies", "movie");
 		// movieCtrl.getDocument("movies", "movie", 13);
+
+		client.close();
+		node.close();
 	}
 
 }

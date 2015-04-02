@@ -12,6 +12,7 @@ import org.elasticsearch.action.search.SearchResponse;
 import org.elasticsearch.action.update.UpdateRequest;
 import org.elasticsearch.action.update.UpdateResponse;
 import org.elasticsearch.client.Client;
+import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.node.Node;
 import org.elasticsearch.search.SearchHit;
 
@@ -58,13 +59,16 @@ public class MovieController implements MovieControllerInterface {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		
+		client.close();
 
 	}
 
 	public void upsertDocument(Movie movie) {
 
 		IndexRequest indexRequest = new IndexRequest("movies", "movie",
-				String.valueOf(movie.getId())).source(createJsonDocument(movie));
+				String.valueOf(movie.getId()))
+				.source(createJsonDocument(movie));
 		UpdateRequest updateRequest = new UpdateRequest("movies", "movie",
 				String.valueOf(movie.getId())).doc(createJsonDocument(movie))
 				.upsert(indexRequest);
@@ -78,6 +82,7 @@ public class MovieController implements MovieControllerInterface {
 			e.printStackTrace();
 		}
 
+		client.close();
 	}
 
 	public Map<String, Object> getDocument(String index, String type, int id) {
@@ -95,14 +100,17 @@ public class MovieController implements MovieControllerInterface {
 		System.out.println(source);
 		System.out.println("------------------------------");
 
+		client.close();
+		
 		return source;
 
+		
 	}
 
 	public void deleteDocument(String index, String type, String id) {
 
-		client.prepareDelete(index, type, id).execute()
-				.actionGet();
+		client.prepareDelete(index, type, id).execute().actionGet();
+		client.close();
 
 	}
 
@@ -119,11 +127,11 @@ public class MovieController implements MovieControllerInterface {
 		// SearchResponse response =
 		// client.prepareSearch().setPostFilter(FilterBuilders.rangeFilter("year").from(2010).to(2015)).execute().actionGet();
 
-		/*
-		 * SearchResponse response = client.prepareSearch()
-		 * .setQuery(QueryBuilders.matchQuery("year", 2012)).execute()
-		 * .actionGet();
-		 */
+		
+		/*  SearchResponse response = client.prepareSearch()
+		  .setQuery(QueryBuilders.matchQuery("year", 2013)).execute()
+		 .actionGet();*/
+		 
 		SearchResponse response = client.prepareSearch().execute().actionGet();
 
 		Map<String, Object> result = new HashMap<String, Object>();
@@ -135,7 +143,7 @@ public class MovieController implements MovieControllerInterface {
 			System.out.println(result);
 		}
 
+		client.close();
 		return result;
 	}
-
 }
