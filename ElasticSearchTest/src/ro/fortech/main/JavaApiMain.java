@@ -1,5 +1,7 @@
 package ro.fortech.main;
 
+import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
+
 import java.io.IOException;
 
 import org.elasticsearch.client.Client;
@@ -8,7 +10,6 @@ import org.elasticsearch.node.Node;
 import ro.fortech.business.MovieController;
 import ro.fortech.model.Movie;
 import ro.fortech.utils.Constants;
-import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
 public class JavaApiMain {
 
