@@ -1,5 +1,0 @@
-TerminalPrefInvertColors=true
-eclipse.preferences.version=1
-module-start-timeout=300000
-overriddenByCSS=,TerminalPrefInvertColors,
-runtimes=<?xml version\="1.0" encoding\="UTF-8" standalone\="no"?>\r\n<runtimes>\r\n  <runtime id\="Web Preview Server Runtime" id-set\="true" location\="E\:/ElasticSearchTest/.metadata/.plugins/com.ibm.etools.wdt.server.core/tmp0" name\="Web Preview Server Runtime" runtime-type-id\="com.ibm.etools.wdt.server.runtime.10" timestamp\="0"/>\r\n  <runtime id\="Apache Tomcat v7.0" location\="E\:/ElasticSearchTest" name\="Apache Tomcat v7.0" runtime-type-id\="org.eclipse.jst.server.tomcat.runtime.70" timestamp\="0"/>\r\n  <runtime id\="Apache Tomcat v7.0 (2)" location\="E\:/ElasticSearchTest" name\="Apache Tomcat v7.0 (2)" runtime-type-id\="org.eclipse.jst.server.tomcat.runtime.70" timestamp\="0"/>\r\n  <runtime id\="Apache Tomcat v7.0 (3)" location\="C\:/Users/ioanaf/Downloads/apache-tomee-1.7.0-jaxrs" name\="Apache Tomcat v7.0 (3)" runtime-type-id\="org.eclipse.jst.server.tomcat.runtime.70" timestamp\="0"/>\r\n</runtimes>\r\n
