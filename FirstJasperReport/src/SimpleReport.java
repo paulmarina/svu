@@ -59,8 +59,8 @@ public class SimpleReport {
 		MovieController movieCtrl = new MovieController();
 		List<Movie> movies =  movieCtrl.searchDocument();
 		
-		/*for (entry : movies) {
-			String st = entry;
+		/*for (movie : movies) {
+			String st = movie;
 			System.out.print(st);
 		}*/
 	}
