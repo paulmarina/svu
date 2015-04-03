@@ -165,7 +165,7 @@ public class MovieController implements MovieControllerInterface {
 					localYear = Integer.parseInt(entry.getValue().toString());
 				}
 				
-				Movie movie = new Movie(localTitle,localDirector, localYear, localId);
+				Movie movie = new Movie(localTitle, localDirector, localYear, localId);
 				result.add(movie);
 			}*/
 			Map<String, Object> myResult = hit.getSource();
