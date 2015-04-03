@@ -2,10 +2,14 @@ package ro.fortech.business;
 
 import static org.elasticsearch.node.NodeBuilder.nodeBuilder;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Properties;
 import java.util.concurrent.ExecutionException;
 
 import org.elasticsearch.action.get.GetResponse;
@@ -27,10 +31,15 @@ public class MovieController implements MovieControllerInterface {
 
 	Node node;
 	Client client;
+	String index;
+	String type;
+	private Properties properties = new Properties();
 
 	public MovieController() {
 
-		this.node = nodeBuilder().clusterName("mormon").node();
+		properties = loadPaths();
+		this.node = nodeBuilder().clusterName(
+				properties.getProperty(Constants.CLUSTER)).node();
 		this.client = node.client();
 
 	}
@@ -48,10 +57,12 @@ public class MovieController implements MovieControllerInterface {
 
 	public void updateDocument(Movie movie) {
 
+		properties = loadPaths();
+
 		UpdateRequest updateRequest = new UpdateRequest();
 
-		updateRequest.index(Constants.MOVIE_INDEX);
-		updateRequest.type(Constants.MOVIE_TYPE);
+		updateRequest.index(properties.getProperty(Constants.INDEX));
+		updateRequest.type(properties.getProperty(Constants.TYPE));
 		updateRequest.id(String.valueOf(movie.getId()));
 		updateRequest.doc(createJsonDocument(movie));
 		try {
@@ -70,12 +81,17 @@ public class MovieController implements MovieControllerInterface {
 
 	public void upsertDocument(Movie movie) {
 
-		IndexRequest indexRequest = new IndexRequest(Constants.MOVIE_INDEX,
-				Constants.MOVIE_TYPE, String.valueOf(movie.getId()))
-				.source(createJsonDocument(movie));
-		UpdateRequest updateRequest = new UpdateRequest(Constants.MOVIE_INDEX,
-				Constants.MOVIE_TYPE, String.valueOf(movie.getId())).doc(
-				createJsonDocument(movie)).upsert(indexRequest);
+		properties = loadPaths();
+
+		IndexRequest indexRequest = new IndexRequest(
+				properties.getProperty(Constants.INDEX),
+				properties.getProperty(Constants.TYPE), String.valueOf(movie
+						.getId())).source(createJsonDocument(movie));
+		UpdateRequest updateRequest = new UpdateRequest(
+				properties.getProperty(Constants.INDEX),
+				properties.getProperty(Constants.TYPE), String.valueOf(movie
+						.getId())).doc(createJsonDocument(movie)).upsert(
+				indexRequest);
 		try {
 			client.update(updateRequest).get();
 		} catch (InterruptedException e) {
@@ -91,9 +107,12 @@ public class MovieController implements MovieControllerInterface {
 
 	public Map<String, Object> getDocument(String id) {
 
+		properties = loadPaths();
+
 		GetResponse getResponse = client
-				.prepareGet(Constants.MOVIE_INDEX, Constants.MOVIE_TYPE, id)
-				.execute().actionGet();
+				.prepareGet(properties.getProperty(Constants.INDEX),
+						properties.getProperty(Constants.TYPE), id).execute()
+				.actionGet();
 		Map<String, Object> source = getResponse.getSource();
 
 		System.out.println("------------------------------");
@@ -112,8 +131,11 @@ public class MovieController implements MovieControllerInterface {
 
 	public void deleteDocument(String id) {
 
-		client.prepareDelete(Constants.MOVIE_INDEX, Constants.MOVIE_TYPE, id)
-				.execute().actionGet();
+		properties = loadPaths();
+
+		client.prepareDelete(properties.getProperty(Constants.INDEX),
+				properties.getProperty(Constants.TYPE), id).execute()
+				.actionGet();
 		client.close();
 
 	}
@@ -131,15 +153,19 @@ public class MovieController implements MovieControllerInterface {
 		// SearchResponse response =
 		// client.prepareSearch().setPostFilter(FilterBuilders.rangeFilter("year").from(2010).to(2015)).execute().actionGet();
 
+		properties = loadPaths();
+
 		SearchResponse response;
 
 		if (value == null && column == null) {
-			response = client.prepareSearch().setTypes(Constants.MOVIE_TYPE)
-					.execute().actionGet();
+			response = client.prepareSearch()
+					.setTypes(properties.getProperty(Constants.TYPE)).execute()
+					.actionGet();
 
 		} else {
 
-			response = client.prepareSearch().setTypes(Constants.MOVIE_TYPE)
+			response = client.prepareSearch()
+					.setTypes(properties.getProperty(Constants.TYPE))
 					.setQuery(QueryBuilders.matchQuery(column, value))
 					.execute().actionGet();
 		}
@@ -172,9 +198,11 @@ public class MovieController implements MovieControllerInterface {
 					localId);
 
 			result.add(movie);
-			/*System.out.println(hit.getType());
-			System.out.println(movie.getId() + " " + movie.getTitle() + " "
-					+ movie.getDirector() + " " + movie.getYear());*/
+			/*
+			 * System.out.println(hit.getType());
+			 * System.out.println(movie.getId() + " " + movie.getTitle() + " " +
+			 * movie.getDirector() + " " + movie.getYear());
+			 */
 
 		}
 
@@ -185,4 +213,23 @@ public class MovieController implements MovieControllerInterface {
 	public List<Movie> searchDocument() {
 		return searchDocument(null, null);
 	}
+
+	private Properties loadPaths() {
+
+		Properties result = null;
+		try {
+
+			File file = new File(Constants.XML_PATH);
+			FileInputStream fileInput = new FileInputStream(file);
+			Properties properties = new Properties();
+			properties.loadFromXML(fileInput);
+			fileInput.close();
+			result = properties;
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+
 }

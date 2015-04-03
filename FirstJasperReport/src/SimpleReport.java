@@ -22,10 +22,9 @@ public class SimpleReport {
 			parameters.put("ReportTitle", "Movies");
 			parameters.put("Author", "P.A.I.");
 
-			/*
-			 * String s = JasperCompileManager
-			 * .compileReportToFile("reports/report1.jrxml");
-			 */
+			/*String s = JasperCompileManager
+					.compileReportToFile("reports/report1.jrxml");*/
+
 			jasperPrint = JasperFillManager.fillReport(
 					"reports/report1.jasper", parameters,
 					new JRTableModelDataSource(tableModel));
