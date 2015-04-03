@@ -19,7 +19,7 @@ import org.elasticsearch.search.SearchHit;
 
 import ro.fortech.interfaces.MovieControllerInterface;
 import ro.fortech.model.Movie;
-import ro.fortech.utils.Constants;
+import ro.fortech.utils.Constants;;
 
 public class MovieController implements MovieControllerInterface {
 
@@ -148,7 +148,7 @@ public class MovieController implements MovieControllerInterface {
 
 		SearchHit[] results = response.getHits().getHits();
 		for (SearchHit hit : results) {
-			/*Map<String, Object> partialResult = hit.getSource();
+			Map<String, Object> partialResult = hit.getSource();
 			
 			for (Map.Entry<String, Object> entry : partialResult.entrySet()) {
 				String localTitle = "";
@@ -167,10 +167,9 @@ public class MovieController implements MovieControllerInterface {
 				
 				Movie movie = new Movie(localTitle, localDirector, localYear, localId);
 				result.add(movie);
-			}*/
-			Map<String, Object> myResult = hit.getSource();
+			}
 			System.out.println(hit.getType());
-			System.out.println(myResult);
+			System.out.println(result);
 		}
 
 		client.close();
