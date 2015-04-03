@@ -1,6 +1,5 @@
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.swing.table.DefaultTableModel;
 
@@ -51,6 +50,9 @@ public class SimpleReport {
 		tableModel = new DefaultTableModel(data, columnNames);
 	}
 
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		new SimpleReport();
 
