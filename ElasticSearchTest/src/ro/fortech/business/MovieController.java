@@ -172,9 +172,9 @@ public class MovieController implements MovieControllerInterface {
 					localId);
 
 			result.add(movie);
-			System.out.println(hit.getType());
+			/*System.out.println(hit.getType());
 			System.out.println(movie.getId() + " " + movie.getTitle() + " "
-					+ movie.getDirector() + " " + movie.getYear());
+					+ movie.getDirector() + " " + movie.getYear());*/
 
 		}
 
