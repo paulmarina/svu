@@ -146,32 +146,34 @@ public class MovieController implements MovieControllerInterface {
 
 		SearchHit[] results = response.getHits().getHits();
 		for (SearchHit hit : results) {
+
 			Map<String, Object> partialResult = hit.getSource();
 			String localTitle = "";
 			String localDirector = "";
 			int localId = 0;
 			int localYear = 0;
-			
+
 			for (Map.Entry<String, Object> entry : partialResult.entrySet()) {
-				
-				if(entry.getKey().equals("title")){
+
+				if (entry.getKey().equals("title")) {
 					localTitle = entry.getValue().toString();
-				} else if(entry.getKey().equals("director")){
+				} else if (entry.getKey().equals("director")) {
 					localDirector = entry.getValue().toString();
-				} else if(entry.getKey().equals("id")){
+				} else if (entry.getKey().equals("id")) {
 					localId = Integer.parseInt(entry.getValue().toString());
-				} else if(entry.getKey().equals("year")){
+				} else if (entry.getKey().equals("year")) {
 					localYear = Integer.parseInt(entry.getValue().toString());
 				}
 			}
-			
-			Movie movie = new Movie(localTitle, localDirector, localYear, localId);
-			result.add(movie);
-			
-			System.out.println(hit.getType());
-			System.out.println(movie.getId() + " " + movie.getTitle() + " " + movie.getDirector() + " " + movie.getYear());
-		}
 
+			Movie movie = new Movie(localTitle, localDirector, localYear,
+					localId);
+			result.add(movie);
+
+			System.out.println(hit.getType());
+			System.out.println(movie.getId() + " " + movie.getTitle() + " "
+					+ movie.getDirector() + " " + movie.getYear());
+		}
 		client.close();
 		return result;
 	}
