@@ -27,9 +27,9 @@ public class JavaApiMain {
 		Movie movie5 = new Movie("Captain America", "Dir", 2012, 14);
 		Movie movie6 = new Movie("Hulk", "Green", 2011, 15);
 */
-		client.prepareIndex(Constants.MOVIE_INDEX, Constants.MOVIE_TYPE, String.valueOf(movie.getId()))
+		/*client.prepareIndex(Constants.MOVIE_INDEX, Constants.MOVIE_TYPE, String.valueOf(movie.getId()))
 				.setSource(movieCtrl.createJsonDocument(movie)).execute()
-				.actionGet();
+				.actionGet();*/
 
 				// movieCtrl.updateDocument(movie);
 
