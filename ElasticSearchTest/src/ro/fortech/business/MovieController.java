@@ -19,7 +19,9 @@ import org.elasticsearch.search.SearchHit;
 
 import ro.fortech.interfaces.MovieControllerInterface;
 import ro.fortech.model.Movie;
-import ro.fortech.utils.Constants;;
+import ro.fortech.utils.Constants;
+
+;
 
 public class MovieController implements MovieControllerInterface {
 
@@ -143,33 +145,37 @@ public class MovieController implements MovieControllerInterface {
 		}
 
 		List<Movie> result = new ArrayList<Movie>();
-		
-		
 
 		SearchHit[] results = response.getHits().getHits();
 		for (SearchHit hit : results) {
 			Map<String, Object> partialResult = hit.getSource();
-			
+
+			String localTitle = "";
+			String localDirector = "";
+			int localId = 0;
+			int localYear = 0;
+
 			for (Map.Entry<String, Object> entry : partialResult.entrySet()) {
-				String localTitle = "";
-				String localDirector = "";
-				int localId = 0;
-				int localYear = 0;
-				if(entry.getKey().equals("title")){
+
+				if (entry.getKey().equals("title")) {
 					localTitle = entry.getValue().toString();
-				} else if(entry.getKey().equals("director")){
+				} else if (entry.getKey().equals("director")) {
 					localDirector = entry.getValue().toString();
-				} else if(entry.getKey().equals("id")){
+				} else if (entry.getKey().equals("id")) {
 					localId = Integer.parseInt(entry.getValue().toString());
-				} else if(entry.getKey().equals("year")){
+				} else if (entry.getKey().equals("year")) {
 					localYear = Integer.parseInt(entry.getValue().toString());
 				}
-				
-				Movie movie = new Movie(localTitle, localDirector, localYear, localId);
-				result.add(movie);
 			}
+
+			Movie movie = new Movie(localTitle, localDirector, localYear,
+					localId);
+
+			result.add(movie);
 			System.out.println(hit.getType());
-			System.out.println(result);
+			System.out.println(movie.getId() + " " + movie.getTitle() + " "
+					+ movie.getDirector() + " " + movie.getYear());
+
 		}
 
 		client.close();
