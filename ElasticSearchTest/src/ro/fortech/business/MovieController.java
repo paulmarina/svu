@@ -140,10 +140,12 @@ public class MovieController implements MovieControllerInterface {
 		}
 
 		List<Movie> result = new ArrayList<Movie>();
+		
+		
 
 		SearchHit[] results = response.getHits().getHits();
 		for (SearchHit hit : results) {
-			Map<String, Object> partialResult = hit.getSource();
+			/*Map<String, Object> partialResult = hit.getSource();
 			
 			for (Map.Entry<String, Object> entry : partialResult.entrySet()) {
 				String localTitle = "";
@@ -162,10 +164,10 @@ public class MovieController implements MovieControllerInterface {
 				
 				Movie movie = new Movie(localTitle,localDirector, localYear, localId);
 				result.add(movie);
-			}
-			
+			}*/
+			Map<String, Object> myResult = hit.getSource();
 			System.out.println(hit.getType());
-			System.out.println(result);
+			System.out.println(myResult);
 		}
 
 		client.close();
