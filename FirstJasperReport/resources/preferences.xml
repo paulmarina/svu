@@ -3,7 +3,7 @@
 <!DOCTYPE properties SYSTEM "http://java.sun.com/dtd/properties.dtd">
 <properties>
 <entry key="INDEX">svu</entry>
-<entry key="TYPE">movie</entry>
+<entry key="TYPE">employee</entry>
 <entry key="CLUSTER">mormon</entry>
 
 </properties>
