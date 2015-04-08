@@ -1,0 +1,56 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+
+<h:head>
+	<link href="/resources/css/table.css" rel="stylesheet" type="text/css" />
+</h:head>
+<h:body>
+
+	<f:view>
+
+		<h:form>
+
+			<rich:extendedDataTable id="moviesTable"
+				value="#{displayMoviesDialog.moviesList}" var="movie"
+				iterationStatusVar="it" styleClass="movieTable"
+				headerClass="movieTableHeader"
+				rowClasses="movieTableOddRow,movieTableEvenRow" style="width:20"
+				rows="2">
+
+				<f:facet name="header">
+					<h:outputText value="List of movies" />
+				</f:facet>
+
+				<f:facet name="noData"> Nothing found </f:facet>
+				<rich:column>
+					<f:facet name="header">#</f:facet>
+					<h:outputText value="#{it.index + 1}" />
+				</rich:column>
+
+				<rich:column breakBefore="true">
+					<f:facet name="header">Title</f:facet>
+					<h:outputText value="#{movie.title}" />
+				</rich:column>
+
+				<rich:column breakBefore="true">
+					<f:facet name="header">Director</f:facet>
+					<h:outputText value="#{movie.director}" />
+				</rich:column>
+
+				<rich:column breakBefore="true">
+					<f:facet name="header">Year</f:facet>
+					<h:outputText value="#{movie.year}" />
+				</rich:column>
+
+			</rich:extendedDataTable>
+		</h:form>
+
+	</f:view>
+
+</h:body>
+</html>
